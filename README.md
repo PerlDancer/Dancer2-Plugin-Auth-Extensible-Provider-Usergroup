@@ -11,10 +11,6 @@ you wouldn't want to store plain text passwords now, would you?  (If
 your answer to that is yes, please reconsider; you really don't want to
 do that, when it's so easy to do things right!)
 
-See Dancer2::Plugin::DBIC for how to configure a database connection
-appropriately; see the "CONFIGURATION" section below for how to
-configure this authentication provider with database details.
-
 See Dancer2::Plugin::Auth::Extensible for details on how to use the
 authentication framework, including how to use "require_login" and
 "require_role".
