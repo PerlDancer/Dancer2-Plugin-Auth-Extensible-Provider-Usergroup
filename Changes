@@ -1,4 +1,7 @@
 Revision history for Dancer2-Plugin-Auth-Extensible-Provider-Usergroup
 
+0.23	2015-03-02
+	Fix Dancer2 deprecations
+
 0.22	2014-12-17
 	Dancer2 version of DPAEPU
