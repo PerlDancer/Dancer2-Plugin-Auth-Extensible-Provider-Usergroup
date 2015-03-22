@@ -1,5 +1,8 @@
 Revision history for Dancer2-Plugin-Auth-Extensible-Provider-Usergroup
 
+0.24	2015-03-22
+	Use realm_dsl
+
 0.23	2015-03-02
 	Fix Dancer2 deprecations
 
