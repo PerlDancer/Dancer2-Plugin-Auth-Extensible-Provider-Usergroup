@@ -14,10 +14,10 @@ WriteMakefile(
     PL_FILES         => {},
     PREREQ_PM => {
         'Test::More' => 0,
-        'Dancer2'    => 0.156001,
-        'Dancer2::Plugin::Auth::Extensible' => 0,
+        'Dancer2'    => 0.159002,
+        'Dancer2::Plugin::Auth::Extensible' => 0.305,
         'Dancer2::Plugin::DBIC' => 0,
-        'Dancer2::Plugin::Passphrase' => 0,
+        'Dancer2::Plugin::Passphrase' => 3.000002,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Dancer2-Plugin-Auth-Extensible-Provider-Usergroup-*' },

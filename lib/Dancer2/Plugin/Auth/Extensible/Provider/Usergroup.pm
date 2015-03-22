@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use base 'Dancer2::Plugin::Auth::Extensible::Provider::Base';
 
-our $VERSION = '0.23';
+our $VERSION = '0.24';
 
 =head1 NAME 
 
@@ -166,44 +166,6 @@ You want your data quickly.
 
 =head1 INTERNALS
 
-=head4 new
-
-Used by L<Dancer2::Plugin::Auth::Extensible>
-
-=cut
-
-# Override ::Base->new, as we need to store DB schema
-# Stolen from Dancer2::Plugin::Auth::Extensible::Provider::DBIC (ABEVERLEY)
-
-sub new {
-    my ($class, $realm_settings, $dsl) = @_;
-    
-    # Did we load Plugin::Passphrase?
-    die 'No passphrase method in app. Did you load Plugin::Passphrase before Plugin::Auth::Extensible?'
-        unless $dsl->can('passphrase');
-    
-    # Grab a handle to the Plugin::DBIC schema
-    die 'No schema method in app. Did you load Plugin::DBIC before Plugin::Auth::Extensible?'
-        unless $dsl->can('schema');
-    my $schema = $dsl->schema;
-    
-    my $self = {
-        realm_settings => $realm_settings,
-        dsl_local      => $dsl,
-        schema         => $schema,
-    };
-    return bless $self => $class;
-}
-
-sub _dsl_local { shift->{dsl_local} };
-
-sub _schema {
-    # Make sure we have an existing DBIC schema. Should have been
-    # created on plugin load
-    shift->{schema} or die "No DBIC schema available";
-}
-
-
 =head4 get_user_details
 
 Used by L<Dancer2::Plugin::Auth::Extensible>
@@ -217,7 +179,7 @@ sub get_user_details {
     my $settings = $self->realm_settings;
 
     # Get our schema name and find out the object and attribute names:
-    my $schema = $self->_schema($settings->{schema_name} || 'default')
+    my $schema = $self->realm_dsl->schema($settings->{schema_name} || 'default')
         or die "No DBIC schema connection";
 
     my $user_rset_name = $settings->{user_rset} || 'User';
@@ -229,7 +191,7 @@ sub get_user_details {
     
     my $user_row;
     unless ($user_row = $user_rset->next) {
-        $self->_dsl_local->debug("No such user $login_name");
+        $self->realm_dsl->debug("No such user $login_name");
         return;
     }
 
@@ -260,10 +222,11 @@ sub match_password {
     
     if ($correct =~ /^\{.+}/) {
         # Looks like a crypted password
-        return $self->_dsl_local->passphrase($given)->matches($correct);
+        return $self->realm_dsl->passphrase($given)->matches($correct);
     }
     
     #not crypted?
+    $self->realm_dsl->debug("Passphrase $correct not crypted");
     return $given eq $correct;
 }
 
@@ -279,13 +242,14 @@ sub authenticate_user {
     # Look up the user:
     my $user = $self->get_user_details($username);
     return unless $user;
+    $self->realm_dsl->debug("User $username found");
 
     my $settings = $self->realm_settings;
     
     my $must_be_activated = $settings->{user_activated_column};
     if ($must_be_activated) {
         unless ($user->{$must_be_activated}) {
-            $self->_dsl_local->debug("User $username not activated");
+            $self->realm_dsl->debug("User $username not activated");
             return;
         }        
     }
