@@ -5,11 +5,16 @@ use strict;
 use warnings;
 use base 'Dancer2::Plugin::Auth::Extensible::Provider::Base';
 
-our $VERSION = '0.24';
+our $VERSION = '0.25';
 
 =head1 NAME 
 
 Dancer2::Plugin::Auth::Extensible::Provider::Usergroup - authenticate as a member of a group
+
+=head1 DEPRECATED
+
+This module is deprecated. It uses plugins in plugins.
+That is deprecated in Dancer2.
 
 
 =head1 SYNOPSIS

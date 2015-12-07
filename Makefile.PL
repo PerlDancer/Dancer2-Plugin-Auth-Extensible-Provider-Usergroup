@@ -23,6 +23,7 @@ WriteMakefile(
     clean => { FILES => 'Dancer2-Plugin-Auth-Extensible-Provider-Usergroup-*' },
     META_MERGE => {
         resources => {
+            x_deprecated => 1,
             repository => 'https://github.com/hvoers/Dancer2-Plugin-Auth-Extensible-Provider-Usergroup',
             bugtracker => 'https://github.com/hvoers/Dancer2-Plugin-Auth-Extensible-Provider-Usergroup/issues',
             homepage   => 'https://github.com/hvoers/Dancer2-Plugin-Auth-Extensible-Provider-Usergroup/',
