@@ -4,9 +4,8 @@ LICENSE
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP
-README.md
+README
 t/00-load.t
-t/boilerplate.t
 t/ddl/schema1.ddl
 t/ddl/schema2.ddl
 t/lib/config.yml
@@ -24,6 +23,5 @@ t/manifest.t
 t/pod-coverage.t
 t/pod.t
 t/provider-usergroup.t
-t/boilerplate.t
 t/pod-coverage.t
 t/pod.t
