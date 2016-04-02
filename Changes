@@ -1,5 +1,11 @@
 Revision history for Dancer2-Plugin-Auth-Extensible-Provider-Usergroup
 
+0.600   2016-04-01
+
+    Module is no longer deprecated.
+    Reworked to use new Dancer2 plugin2 by SysPete <peter@sysnix.com>.
+    Added base tests from Dancer2::Plugin::Auth::Extensible.
+   
 0.25	2015-12-07
 	This module is deprecated.
 	It uses plugins in pugins. That is deprecated in Dancer2.

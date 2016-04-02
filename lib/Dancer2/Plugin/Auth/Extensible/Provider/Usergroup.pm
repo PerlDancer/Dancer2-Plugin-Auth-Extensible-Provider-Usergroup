@@ -1,21 +1,15 @@
 package Dancer2::Plugin::Auth::Extensible::Provider::Usergroup;
 
-use 5.010001;
-use strict;
-use warnings;
-use base 'Dancer2::Plugin::Auth::Extensible::Provider::Base';
+use Carp;
+use Moo;
+with "Dancer2::Plugin::Auth::Extensible::Role::Provider";
+use namespace::clean;
 
-our $VERSION = '0.25';
+our $VERSION = '0.600';
 
 =head1 NAME 
 
 Dancer2::Plugin::Auth::Extensible::Provider::Usergroup - authenticate as a member of a group
-
-=head1 DEPRECATED
-
-This module is deprecated. It uses plugins in plugins.
-That is deprecated in Dancer2.
-
 
 =head1 SYNOPSIS
 
@@ -104,6 +98,132 @@ A full example showing all options:
 See the main L<Dancer2::Plugin::Auth::Extensible> documentation for how to
 configure multiple authentication realms.
 
+=head1 ATTRIBUTES
+
+=cut
+
+has dancer2_plugin_dbic => (
+    is      => 'ro',
+    lazy    => 1,
+    default => sub { $_[0]->plugin->app->with_plugin('Dancer2::Plugin::DBIC') },
+    handles => { dbic_schema => 'schema' },
+    init_arg => undef,
+);
+
+has dancer2_plugin_passphrase => (
+    is   => 'ro',
+    lazy => 1,
+    default =>
+      sub { $_[0]->plugin->app->with_plugin('Dancer2::Plugin::Passphrase') },
+    handles  => ['passphrase'],
+    init_arg => undef,
+);
+
+=head2 schema_name
+
+Defaults to 'default',
+
+=cut
+
+has schema_name => (
+    is      => 'ro',
+);
+
+=head2 schema
+
+Defaults to a DBIC schema using L</schema_name>.
+
+=cut
+
+has schema => (
+    is      => 'ro',
+    lazy    => 1,
+    default => sub {
+        my $self = shift;
+        $self->schema_name
+          ? $self->dbic_schema( $self->schema_name )
+          : $self->dbic_schema;
+    },
+);
+
+=head2 user_rset
+
+The name of the DBIC result class for the user table.
+
+Defaults to 'User'.
+
+=cut
+
+has user_rset => (
+    is      => 'ro',
+    default => 'User',
+);
+
+=head2 user_role_rset
+
+The name of the DBIC result class for the role view.
+
+Defaults to 'Role'.
+
+=cut
+
+has user_role_rset => (
+    is      => 'ro',
+    default => 'Role',
+);
+
+=head2 user_login_name_column
+
+The login_name column in L</user_rset>.
+
+Defaults to 'login_name'.
+
+=cut
+
+has user_login_name_column => (
+    is      => 'ro',
+    default => 'login_name',
+);
+
+=head2 user_passphrase_column
+
+The passphrase column in L</user_rset>.
+
+Defaults to 'passphrase'.
+
+=cut
+
+has user_passphrase_column => (
+    is      => 'ro',
+    default => 'passphrase',
+);
+
+=head2 user_role_column
+
+The role column in L</user_role_rset>.
+
+Defaults to 'role'.
+
+=cut
+
+has user_role_column => (
+    is      => 'ro',
+    default => 'role',
+);
+
+=head2 user_activated_column
+
+The user activated column in L</user_rset>.
+
+Defaults to 'activated'.
+
+=cut
+
+has user_activated_column => (
+    is      => 'ro',
+    default => 'activated',
+);
+
 =head1 SUGGESTED SCHEMA
 
 If you use a schema similar to the examples provided here, you should need
@@ -155,7 +275,7 @@ Map the user role by name.
     CREATE VIEW roles AS
     SELECT login_name, group_name AS role
         FROM users
-        LEFT JOIN membership ON users.id = memberships.user_id
+        LEFT JOIN memberships ON users.id = memberships.user_id
         LEFT JOIN groups ON groups.id = memberships.group_id
     ;
 
@@ -181,33 +301,22 @@ sub get_user_details {
     my ($self, $login_name) = @_;
     return unless defined $login_name;
 
-    my $settings = $self->realm_settings;
-
-    # Get our schema name and find out the object and attribute names:
-    my $schema = $self->realm_dsl->schema($settings->{schema_name} || 'default')
-        or die "No DBIC schema connection";
-
-    my $user_rset_name = $settings->{user_rset} || 'User';
-    my $login_name_column = $settings->{user_login_name_column} || 'login_name';
-
     # Look up the user 
-    my $user_rset = $schema->resultset($user_rset_name)
-        ->search({ $login_name_column => $login_name });
+    my $user_rset = $self->schema->resultset($self->user_rset)
+        ->search({ $self->user_login_name_column => $login_name });
     
     my $user_row;
     unless ($user_row = $user_rset->next) {
-        $self->realm_dsl->debug("No such user $login_name");
+        $self->plugin->app->log("debug", "No such user $login_name");
         return;
     }
 
     my %user = $user_row->get_columns;
     
     # Get the roles, if any
-    my $user_role_rset = $settings->{user_role_rset} || 'Role';
-    my $user_role_column = $settings->{user_role_column} || 'role';
-    my @roles = $schema->resultset($user_role_rset)
-        ->search({ $login_name_column => $login_name })
-        ->get_column($user_role_column)
+    my @roles = $self->schema->resultset($self->user_role_rset)
+        ->search({ $self->user_login_name_column => $login_name })
+        ->get_column($self->user_role_column)
         ->all;
     
     $user{roles} = \@roles;
@@ -225,13 +334,14 @@ Used by L<Dancer2::Plugin::Auth::Extensible>
 sub match_password {
     my ($self, $given, $correct) = @_;
     
+    return unless defined $correct;
     if ($correct =~ /^\{.+}/) {
         # Looks like a crypted password
-        return $self->realm_dsl->passphrase($given)->matches($correct);
+        return $self->passphrase($given)->matches($correct);
     }
     
     #not crypted?
-    $self->realm_dsl->debug("Passphrase $correct not crypted");
+    $self->plugin->app->log("debug", "Passphrase $correct not crypted");
     return $given eq $correct;
 }
 
@@ -247,14 +357,12 @@ sub authenticate_user {
     # Look up the user:
     my $user = $self->get_user_details($username);
     return unless $user;
-    $self->realm_dsl->debug("User $username found");
+    $self->plugin->app->log("debug", "User $username found");
 
-    my $settings = $self->realm_settings;
-    
-    my $must_be_activated = $settings->{user_activated_column};
+    my $must_be_activated = $self->user_activated_column;
     if ($must_be_activated) {
         unless ($user->{$must_be_activated}) {
-            $self->realm_dsl->debug("User $username not activated");
+            $self->plugin->app->log("debug", "User $username not activated");
             return;
         }        
     }
@@ -262,8 +370,8 @@ sub authenticate_user {
     # OK, we found a user, let match_password take care of
     # working out if the password is correct
 
-    my $passphrase_column = $settings->{user_passphrase_column} || 'passphrase';
-    return $self->match_password($password, $user->{$passphrase_column});
+    return $self->match_password( $password,
+        $user->{ $self->user_passphrase_column } );
 }
 
 =head4 get_user_roles
