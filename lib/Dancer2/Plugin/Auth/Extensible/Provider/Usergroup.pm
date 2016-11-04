@@ -299,7 +299,7 @@ Used by L<Dancer2::Plugin::Auth::Extensible>
 
 sub get_user_details {
     my ($self, $login_name) = @_;
-    return unless defined $login_name;
+    croak "username must be defined" unless defined $login_name;
 
     # Look up the user 
     my $user_rset = $self->schema->resultset($self->user_rset)
@@ -353,6 +353,8 @@ Used by L<Dancer2::Plugin::Auth::Extensible>
 
 sub authenticate_user {
     my ($self, $username, $password) = @_;
+    croak "username and password must be defined"
+      unless defined $username && defined $password;
 
     # Look up the user:
     my $user = $self->get_user_details($username);

@@ -14,6 +14,13 @@ plugins:
       on_connect_call: use_foreign_keys
       on_connect_do: 'PRAGMA synchronous = OFF'
       quote_names: 1
+    schema3:
+      dsn: 'dbi:SQLite:dbname=:memory:'
+      schema_class: t::lib::Schema1
+      sqlite_unicode: 1
+      on_connect_call: use_foreign_keys
+      on_connect_do: 'PRAGMA synchronous = OFF'
+      quote_names: 1
   Auth::Extensible:
     realms:
       config1:
@@ -21,6 +28,7 @@ plugins:
         schema_name: schema1
       config2:
         provider: Usergroup
+        priority: 10
         schema_name: schema2
         user_rset: Myuser
         user_role_rset: Myrole
@@ -28,3 +36,7 @@ plugins:
         user_passphrase_column: mypassphrase
         user_role_column: myrole
         user_activated_column: myactivated
+      config3:
+        provider: Usergroup
+        priority: 2
+        schema_name: schema3
