@@ -15,7 +15,7 @@ WriteMakefile(
     PREREQ_PM => {
         'Test::More' => 0,
         'Dancer2'    => '0.200000',
-        'Dancer2::Plugin::Auth::Extensible' => 0.600,
+        'Dancer2::Plugin::Auth::Extensible' => '0.620',
         'Dancer2::Plugin::DBIC' => '0.0012',
         'Dancer2::Plugin::Passphrase' => 3.000002,
     },

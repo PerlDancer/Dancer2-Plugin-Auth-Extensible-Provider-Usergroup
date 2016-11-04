@@ -8,6 +8,7 @@ README
 t/00-load.t
 t/ddl/schema1.ddl
 t/ddl/schema2.ddl
+t/ddl/schema3.ddl
 t/lib/config.yml
 t/lib/Schema1.pm
 t/lib/Schema1/Result/Group.pm
