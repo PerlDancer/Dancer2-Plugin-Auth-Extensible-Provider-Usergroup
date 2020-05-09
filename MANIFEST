@@ -24,5 +24,3 @@ t/manifest.t
 t/pod-coverage.t
 t/pod.t
 t/provider-usergroup.t
-t/pod-coverage.t
-t/pod.t
