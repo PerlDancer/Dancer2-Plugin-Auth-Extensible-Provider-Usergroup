@@ -14,18 +14,18 @@ get '/unsubscribe' => require_role forum => sub { ... };
 # DESCRIPTION
 
 This class is an authentication provider designed to authenticate users against
-a DBIC schema, using [Dancer2::Plugin::DBIC](https://metacpan.org/pod/Dancer2::Plugin::DBIC) to access a database.
+a DBIC schema, using [Dancer2::Plugin::DBIC](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3ADBIC) to access a database.
 
-[Dancer2::Plugin::Passphrase](https://metacpan.org/pod/Dancer2::Plugin::Passphrase) is used to handle hashed passwords securely; you wouldn't
+[Dancer2::Plugin::Passphrase](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3APassphrase) is used to handle hashed passwords securely; you wouldn't
 want to store plain text passwords now, would you?  (If your answer to that is
 yes, please reconsider; you really don't want to do that, when it's so easy to
 do things right!)
 
-See [Dancer2::Plugin::DBIC](https://metacpan.org/pod/Dancer2::Plugin::DBIC) for how to configure a database connection
+See [Dancer2::Plugin::DBIC](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3ADBIC) for how to configure a database connection
 appropriately; see the ["CONFIGURATION"](#configuration) section below for how to configure this
 authentication provider with database details.
 
-See [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2::Plugin::Auth::Extensible) for details on how to use the
+See [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3AAuth%3A%3AExtensible) for details on how to use the
 authentication framework, including how to use "require\_login" and "require\_role".
 
 # CONFIGURATION
@@ -46,7 +46,7 @@ plugins:
 ```
 
 You would still need to have provided suitable database connection details to
-[Dancer2::Plugin::DBIC](https://metacpan.org/pod/Dancer2::Plugin::DBIC), of course;  see the docs for that plugin for full
+[Dancer2::Plugin::DBIC](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3ADBIC), of course;  see the docs for that plugin for full
 details, but it could be as simple as, e.g.:
 
 ```perl
@@ -91,7 +91,7 @@ plugins:
                 user_activated_column: 'activated'
 ```
 
-See the main [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2::Plugin::Auth::Extensible) documentation for how to
+See the main [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3AAuth%3A%3AExtensible) documentation for how to
 configure multiple authentication realms.
 
 # ATTRIBUTES
@@ -219,19 +219,19 @@ CREATE INDEX member_group ON memberships (group_id);
 
 #### get\_user\_details
 
-Used by [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2::Plugin::Auth::Extensible)
+Used by [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3AAuth%3A%3AExtensible)
 
 #### match\_password
 
-Used by [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2::Plugin::Auth::Extensible)
+Used by [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3AAuth%3A%3AExtensible)
 
 #### authenticate\_user
 
-Used by [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2::Plugin::Auth::Extensible)
+Used by [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3AAuth%3A%3AExtensible)
 
 #### get\_user\_roles
 
-Used by [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2::Plugin::Auth::Extensible)
+Used by [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3AAuth%3A%3AExtensible)
 
 # COPYRIGHT
 
