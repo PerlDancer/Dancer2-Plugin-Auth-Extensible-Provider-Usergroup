@@ -23,9 +23,9 @@ WriteMakefile(
     clean => { FILES => 'Dancer2-Plugin-Auth-Extensible-Provider-Usergroup-*' },
     META_MERGE => {
         resources => {
-            repository => 'https://github.com/SysPete/Dancer2-Plugin-Auth-Extensible-Provider-Usergroup',
-            bugtracker => 'https://github.com/SysPete/Dancer2-Plugin-Auth-Extensible-Provider-Usergroup/issues',
-            homepage   => 'https://github.com/SysPete/Dancer2-Plugin-Auth-Extensible-Provider-Usergroup/',
+            repository => 'https://github.com/PerlDancer/Dancer2-Plugin-Auth-Extensible-Provider-Usergroup',
+            bugtracker => 'https://github.com/PerlDancer/Dancer2-Plugin-Auth-Extensible-Provider-Usergroup/issues',
+            homepage   => 'https://github.com/PerlDancer/Dancer2-Plugin-Auth-Extensible-Provider-Usergroup/',
         },
     },
 );
