@@ -16,7 +16,7 @@ get '/unsubscribe' => require_role forum => sub { ... };
 This class is an authentication provider designed to authenticate users against
 a DBIC schema, using [Dancer2::Plugin::DBIC](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3ADBIC) to access a database.
 
-[Dancer2::Plugin::Passphrase](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3APassphrase) is used to handle hashed passwords securely; you wouldn't
+[Dancer2::Plugin:: Passphrase](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3APassphrase) is used to handle hashed passwords securely; you wouldn't
 want to store plain text passwords now, would you?  (If your answer to that is
 yes, please reconsider; you really don't want to do that, when it's so easy to
 do things right!)
@@ -28,14 +28,17 @@ authentication provider with database details.
 See [Dancer2::Plugin::Auth::Extensible](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3AAuth%3A%3AExtensible) for details on how to use the
 authentication framework, including how to use "require\_login" and "require\_role".
 
+
+  
 # CONFIGURATION
 
 This provider tries to use sensible defaults, so you may not need to provide
-much configuration if your database tables look similar to those in the
+many configurations if your database tables look similar to those in the
 ["SUGGESTED SCHEMA"](#suggested-schema) section below.
 
-The most basic configuration, assuming defaults for all options, and defining a
-single authentication realm named 'usergroup':
+The most basic configuration, assuming defaults for all options and defining a
+single authentication realm named 'user group':
+
 
 ```perl
 plugins:
@@ -46,8 +49,9 @@ plugins:
 ```
 
 You would still need to have provided suitable database connection details to
-[Dancer2::Plugin::DBIC](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3ADBIC), of course;  see the docs for that plugin for full
+[Dancer2::Plugin:: DBIC](https://metacpan.org/pod/Dancer2%3A%3APlugin%3A%3ADBIC), of course;  see the docs for that plugin for full
 details, but it could be as simple as, e.g.:
+
 
 ```perl
 plugins:
@@ -161,10 +165,10 @@ CREATE TABLE users (
     activated INTEGER
 );
 ```
-
 You will quite likely want other fields to store e.g. the user's name, email
-address, etc; all columns from the users table will be returned by the
+address, etc; all columns from the user's table will be returned by the
 `logged_in_user` keyword for your convenience.
+
 
 ## group table
 
@@ -240,4 +244,4 @@ Copyright (c) 2014 Henk van Oers
 # LICENSE
 
 This library is free software and may be distributed under the same terms
-as perl itself.
+as Perl itself.
